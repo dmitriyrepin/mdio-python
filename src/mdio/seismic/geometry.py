@@ -9,7 +9,7 @@ from abc import ABC
 from abc import abstractmethod
 from enum import Enum
 from enum import auto
-from typing import Sequence
+from typing import TYPE_CHECKING
 
 import numpy as np
 import numpy.typing as npt
@@ -19,6 +19,8 @@ from mdio.seismic.exceptions import GridOverrideKeysError
 from mdio.seismic.exceptions import GridOverrideMissingParameterError
 from mdio.seismic.exceptions import GridOverrideUnknownError
 
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 logger = logging.getLogger(__name__)
 
@@ -204,8 +206,8 @@ def create_counter(
     total_depth: int,
     unique_headers: dict[str, npt.NDArray],
     header_names: list[str],
-):
-    """Helper function to create dictionary tree for counting trace key for auto index."""
+) -> int | dict:
+    """Helper function to create dict tree for counting trace key for auto index."""
     if depth == total_depth:
         return 0
 
@@ -225,8 +227,8 @@ def create_trace_index(
     counter: dict,
     index_headers: dict[str, npt.NDArray],
     header_names: list,
-    dtype=np.int16,
-):
+    dtype: np.dtype = np.int16,
+) -> None:
     """Update dictionary counter tree for counting trace key for auto index."""
     # Add index header
     index_headers["trace"] = np.empty(index_headers[header_names[0]].shape, dtype=dtype)
@@ -252,7 +254,7 @@ def create_trace_index(
 
 
 def analyze_non_indexed_headers(
-    index_headers: dict[str, npt.NDArray], dtype=np.int16
+    index_headers: dict[str, npt.NDArray], dtype: np.dtype = np.int16
 ) -> dict[str, npt.NDArray]:
     """Check input headers for SEG-Y input to help determine geometry.
 
@@ -272,7 +274,7 @@ def analyze_non_indexed_headers(
     unique_headers = {}
     total_depth = 0
     header_names = []
-    for header_key in index_headers.keys():
+    for header_key in index_headers:
         if header_key != "trace":
             unique_headers[header_key] = np.sort(np.unique(index_headers[header_key]))
             header_names.append(header_key)
@@ -335,7 +337,7 @@ class GridOverrideCommand(ABC):
     def transform_chunksize(
         self,
         chunksize: Sequence[int],
-        grid_overrides: dict[str, bool | int],
+        grid_overrides: dict[str, bool | int],  # noqa: ARG002
     ) -> Sequence[int]:
         """Perform the transform of chunksize.
 
@@ -419,7 +421,7 @@ class DuplicateIndex(GridOverrideCommand):
     def transform_chunksize(
         self,
         chunksize: Sequence[int],
-        grid_overrides: dict[str, bool | int],
+        grid_overrides: dict[str, bool | int],  # noqa: ARG002
     ) -> Sequence[int]:
         """Insert chunksize of 1 to the sample-1 dimension."""
         new_chunks = list(chunksize)
@@ -477,8 +479,7 @@ class AutoChannelWrap(GridOverrideCommand):
         unique_cables, cable_chan_min, cable_chan_max, geom_type = result
         logger.info(f"Ingesting dataset as {geom_type.name}")
 
-        # TODO: Add strict=True and remove noqa when min Python is 3.10
-        for cable, chan_min, chan_max in zip(  # noqa: B905
+        for cable, chan_min, chan_max in zip(
             unique_cables, cable_chan_min, cable_chan_max
         ):
             logger.info(
@@ -565,54 +566,6 @@ class CalculateCable(GridOverrideCommand):
         return index_headers
 
 
-class AutoShotWrap(GridOverrideCommand):
-    """Automatically determine ShotGun acquisition type."""
-
-    required_keys = {"shot_line", "gun", "shot_point", "cable", "channel"}
-    required_parameters = None
-
-    def validate(
-        self,
-        index_headers: dict[str, npt.NDArray],
-        grid_overrides: dict[str, bool | int],
-    ) -> None:
-        """Validate if this transform should run on the type of data."""
-        self.check_required_keys(index_headers)
-        self.check_required_params(grid_overrides)
-
-    def transform(
-        self,
-        index_headers: dict[str, npt.NDArray],
-        grid_overrides: dict[str, bool | int],
-    ) -> dict[str, npt.NDArray]:
-        """Perform the grid transform."""
-        self.validate(index_headers, grid_overrides)
-
-        result = analyze_shotlines_for_guns(index_headers)
-        unique_shot_lines, unique_guns_in_shot_line, geom_type = result
-        logger.info(f"Ingesting dataset as shot type: {geom_type.name}")
-
-        # TODO: Add strict=True and remove noqa when min Python is 3.10
-        max_num_guns = 1
-        for shot_line in unique_shot_lines:
-            logger.info(
-                f"shot_line: {shot_line} has guns: {unique_guns_in_shot_line[str(shot_line)]}"
-            )
-            num_guns = len(unique_guns_in_shot_line[str(shot_line)])
-            if num_guns > max_num_guns:
-                max_num_guns = num_guns
-
-        # This might be slow and potentially could be improved with a rewrite
-        # to prevent so many lookups
-        if geom_type == ShotGunGeometryType.B:
-            for shot_line in unique_shot_lines:
-                shot_line_idxs = np.where(index_headers["shot_line"][:] == shot_line)
-                index_headers["shot_point"][shot_line_idxs] = np.floor(
-                    index_headers["shot_point"][shot_line_idxs] / max_num_guns
-                )
-        return index_headers
-
-
 class GridOverrider:
     """Executor for grid overrides.
 
@@ -622,7 +575,7 @@ class GridOverrider:
     This class applies the grid overrides if needed.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Define allowed overrides and parameters here."""
         self.commands = {
             "AutoChannelWrap": AutoChannelWrap(),

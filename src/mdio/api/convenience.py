@@ -8,25 +8,29 @@ import zarr
 from tqdm.auto import tqdm
 from zarr import Blosc
 
+
 from mdio.api.io_utils import process_url
 from mdio.core.indexing import ChunkIterator
 
 
 if TYPE_CHECKING:
+    from pathlib import Path
+    from typing import Any
+
     from numcodecs.abc import Codec
     from numpy.typing import NDArray
     from zarr import Array
 
+    from mdio.api.accessor import MDIOAccessor
     from mdio import MDIOAccessor
     from mdio import MDIOReader
 
-
 def copy_mdio(  # noqa: PLR0913
-    source: MDIOReader,
-    dest_path_or_buffer: str,
+    source: MDIOAccessor,
+    dest_path_or_buffer: str | Path,
     excludes: str = "",
     includes: str = "",
-    storage_options: dict | None = None,
+    storage_options: dict[str, Any] | None = None,
     overwrite: bool = False,
 ) -> None:
     """Copy MDIO file.
