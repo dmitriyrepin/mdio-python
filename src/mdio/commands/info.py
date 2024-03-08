@@ -11,7 +11,6 @@ from click import argument
 from click import command
 from click import option
 
-
 if TYPE_CHECKING:
     from mdio import MDIOReader
     from mdio.core import Grid
