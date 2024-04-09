@@ -46,4 +46,4 @@ class Dataset(BaseDataset):
     """
 
     variables: list[Variable] = Field(..., description="Variables in MDIO dataset")
-    metadata: DatasetMetadata = Field(default=None, description="Dataset metadata.")
+    metadata: DatasetMetadata = Field(..., description="Dataset metadata.")
