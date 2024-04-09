@@ -38,7 +38,7 @@ def model_fields(model: type[BaseModel]) -> dict[str, tuple[Any, Any]]:
 class StrictModel(BaseModel):
     """A model with forbidden extras."""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
 
 
 class CamelCaseStrictModel(StrictModel):
