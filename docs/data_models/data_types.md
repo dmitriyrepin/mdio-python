@@ -132,22 +132,22 @@ efficient access and manipulation.
 ```
 
 Structured data types are an essential component in handling complex data structures,
-particularly in specialized domains like seismic dataset analysis for subsurface
+particularly in specialized domains like seismic data processing for subsurface
 imaging applications. These data types allow for the organization of heterogeneous
-data into a single, structured format, which is crucial for efficient data processing
-and analysis in seismic imaging.
+data into a single, structured format.
 
 They are designed to be memory-efficient, which is vital for handling large seismic
 datasets. Structured data types are adaptable, allowing for the addition or
-modification of fields to depending on seismic analysis needs.
+modification of fields.
 
 A [`StructuredType`](#StructuredType) consists of [`StructuredField`](#StructuredField)s.
 Fields can be different [numeric types](#numeric-types), and each represent a specific
 attribute of the seismic data, like coordinate, line numbers, and time stamps.
 
-Each [`StructuredField`](#StructuredField) must specify a `name` and a byte offset
-(`offset`). Byte offset indicates the position of each field within the structured
-type.
+Each [`StructuredField`](#StructuredField) must specify a `name` and a data format
+(`format`).
+
+All the structured fields will be packed and there will be no gaps between them.
 
 ## Examples
 
@@ -204,37 +204,32 @@ This will yield an in-memory or on-disk struct that looks like this (for each el
   └→ cdp-x └→ cdp-y └→ inline └→crossline
 ```
 
-We can also utilize padding to create structs with non-consecutive offsets. The below
-example shows non-zero starting offset and padding to a pre-defined length of 240-bytes.
+The below example shows mixing different data types.
 
 ```json
 {
   "name": "headers",
   "dataType": {
     "fields": [
-      { "name": "cdp", "format": "int32", "offset": 20 },
-      { "name": "offset", "format": "int32", "offset": 36 },
-      { "name": "cdp-x", "format": "int32", "offset": 180 },
-      { "name": "cdp-y", "format": "int32", "offset": 184 }
+      { "name": "cdp", "format": "uint32" },
+      { "name": "offset", "format": "int16" },
+      { "name": "cdp-x", "format": "float64" },
+      { "name": "cdp-y", "format": "float64" }
     ]
   },
-  "dimensions": ["inline", "crossline"],
-  "itemSize": 240
+  "dimensions": ["inline", "crossline"]
 }
 ```
 
 This will yield an in-memory or on-disk struct that looks like this (for each element):
 
 ```bash
- ←─── 20 ───→ ← 4 → ← 12 → ← 4 → ←─── 140 ────→ ← 4 → ← 4 → ←── 52 ──→  = 240-bytes
-┌────────────┬─────┬──────┬─────┬────╌╌╌╌╌╌────┬─────┬─────┬───╌╌╌╌───┐
-│    void    ╎int32╎ void ╎int32╎     void     ╎int32╎int32╎   void   │ ⋯ (next sample)
-└────────────┴─────┴──────┴─────┴────╌╌╌╌╌╌────┴─────┴─────┴───╌╌╌╌───┘
-                  └→ cdp     └→ offset           └→ cdp-x └→ cdp-y
+ ←── 4 ──→ ← 2 → ←─── 8 ───→ ←─── 8 ───→  = 24-bytes
+┌─────────┬─────┬───────────┬───────────┐
+│  int32  ╎int16╎  float64  ╎  float64  │ ⋯ (next sample)
+└─────────┴─────┴───────────┴───────────┘
+    └→ cdp  └→ offset └→ cdp-x    └→ cdp-y
 ```
-
-Note that void is all padded bytes. The struct will still take 240 bytes of memory even
-if we are storing 4 of 32-bit integers (20 bytes).
 
 ## Model Reference
 

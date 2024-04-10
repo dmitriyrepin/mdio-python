@@ -4,6 +4,8 @@ We take booleans, unsigned and signed integers, floats, and
 complex numbers from numpy data types and allow those.
 """
 
+from __future__ import annotations
+
 from enum import StrEnum
 
 import numpy as np
@@ -26,18 +28,16 @@ ScalarType.__doc__ = """Scalar array data type."""
 
 
 class StructuredField(CamelCaseStrictModel):
-    """Structured array field with name, format, and byte offset."""
+    """Structured array field with name, format."""
 
-    format: ScalarType = Field()
-    name: str | None = Field(default=None)
-    offset: int | None = Field(default=None, ge=0)
+    format: ScalarType = Field(...)
+    name: str = Field(...)
 
 
 class StructuredType(CamelCaseStrictModel):
-    """Structured array type with fields and total item size."""
+    """Structured array type with packed fields."""
 
     fields: list[StructuredField] = Field()
-    item_size: int | None = Field(default=None, gt=0)
 
 
 class DataTypeModel(CamelCaseStrictModel):
