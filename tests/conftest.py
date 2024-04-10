@@ -21,29 +21,3 @@ def segy_input(tmp_path_factory: pytest.TempPathFactory) -> Path:
     urlretrieve(url, tmp_file)  # noqa: S310
 
     return tmp_file
-
-
-@pytest.fixture(scope="session")
-def zarr_tmp(tmp_path_factory: pytest.TempPathFactory) -> Path:
-    """Make a temp file for the output MDIO."""
-    return tmp_path_factory.mktemp(r"mdio")
-
-
-@pytest.fixture(scope="session")
-def zarr_tmp2(tmp_path_factory: pytest.TempPathFactory) -> Path:
-    """Make a temp file for the output MDIO."""
-    return tmp_path_factory.mktemp(r"mdio2")
-
-
-@pytest.fixture(scope="session")
-def segy_export_ibm_tmp(tmp_path_factory: pytest.TempPathFactory) -> Path:
-    """Make a temp file for the round-trip IBM SEG-Y."""
-    tmp_dir = tmp_path_factory.mktemp("segy")
-    return tmp_dir / "teapot_roundtrip_ibm.segy"
-
-
-@pytest.fixture(scope="session")
-def segy_export_ieee_tmp(tmp_path_factory: pytest.TempPathFactory) -> Path:
-    """Make a temp file for the round-trip IEEE SEG-Y."""
-    tmp_dir = tmp_path_factory.mktemp("segy")
-    return tmp_dir / "teapot_roundtrip_ieee.segy"
