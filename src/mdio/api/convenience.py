@@ -8,10 +8,8 @@ import zarr
 from tqdm.auto import tqdm
 from zarr import Blosc
 
-
 from mdio.api.io_utils import process_url
 from mdio.core.indexing import ChunkIterator
-
 
 
 if TYPE_CHECKING:
@@ -23,8 +21,7 @@ if TYPE_CHECKING:
     from zarr import Array
 
     from mdio.api.accessor import MDIOAccessor
-    from mdio import MDIOAccessor
-    from mdio import MDIOReader
+
 
 def copy_mdio(  # noqa: PLR0913
     source: MDIOAccessor,
@@ -140,7 +137,8 @@ def create_rechunk_plan(
 
     for chunks, suffix in zip(chunks_list, suffix_list):  # noqa: B905
         norm_chunks = [
-            min(chunk, size) for chunk, size in zip(chunks, source.shape)  # noqa: B905
+            min(chunk, size)
+            for chunk, size in zip(chunks, source.shape)  # noqa: B905
         ]
 
         if suffix == source.access_pattern:
