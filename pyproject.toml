@@ -59,6 +59,7 @@ mypy = "^1.9.0"
 pre-commit = "^3.7.0"
 pre-commit-hooks = "^4.6.0"
 pytest = "^8.1.1"
+pytest-dependency = "^0.6.0"
 safety = "^2.3.5"
 typeguard = "^4.2.1"
 xdoctest = {version = "^1.1.3", extras = ["colors"]}
@@ -173,6 +174,10 @@ disallow_untyped_defs = true
 
 [[tool.mypy.overrides]]
 module = ["fsspec.*", "numba.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["segyio", "zarr"]
 ignore_missing_imports = true
 
 [tool.pydantic-mypy]
