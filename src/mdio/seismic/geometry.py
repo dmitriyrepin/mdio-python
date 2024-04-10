@@ -80,6 +80,7 @@ class ShotGunGeometryType(Enum):
         Gun 2 ->         2------------------40
 
     """
+
     A = auto()
     B = auto()
 
@@ -171,7 +172,7 @@ def analyze_shotlines_for_guns(
 
     # Find channel min and max values for each cable
     # unique_guns_in_shot_line = np.empty(unique_shot_lines.shape)
-    unique_guns_in_shot_line = dict()
+    unique_guns_in_shot_line = {}
 
     geom_type = ShotGunGeometryType.B
     # Check shot numbers are still unique if div/num_guns
@@ -562,6 +563,53 @@ class CalculateCable(GridOverrideCommand):
             index_headers["channel"] - 1
         ) // channels_per_cable + 1
 
+        return index_headers
+
+
+class AutoShotWrap(GridOverrideCommand):
+    """Automatically determine ShotGun acquisition type."""
+
+    required_keys = {"shot_line", "gun", "shot_point", "cable", "channel"}
+    required_parameters = None
+
+    def validate(
+        self,
+        index_headers: dict[str, npt.NDArray],
+        grid_overrides: dict[str, bool | int],
+    ) -> None:
+        """Validate if this transform should run on the type of data."""
+        self.check_required_keys(index_headers)
+        self.check_required_params(grid_overrides)
+
+    def transform(
+        self,
+        index_headers: dict[str, npt.NDArray],
+        grid_overrides: dict[str, bool | int],
+    ) -> dict[str, npt.NDArray]:
+        """Perform the grid transform."""
+        self.validate(index_headers, grid_overrides)
+
+        result = analyze_shotlines_for_guns(index_headers)
+        unique_shot_lines, unique_guns_in_shot_line, geom_type = result
+        logger.info(f"Ingesting dataset as shot type: {geom_type.name}")
+
+        max_num_guns = 1
+        for shot_line in unique_shot_lines:
+            logger.info(
+                f"shot_line: {shot_line} has guns: {unique_guns_in_shot_line[str(shot_line)]}"
+            )
+            num_guns = len(unique_guns_in_shot_line[str(shot_line)])
+            if num_guns > max_num_guns:
+                max_num_guns = num_guns
+
+        # This might be slow and potentially could be improved with a rewrite
+        # to prevent so many lookups
+        if geom_type == ShotGunGeometryType.B:
+            for shot_line in unique_shot_lines:
+                shot_line_idxs = np.where(index_headers["shot_line"][:] == shot_line)
+                index_headers["shot_point"][shot_line_idxs] = np.floor(
+                    index_headers["shot_point"][shot_line_idxs] / max_num_guns
+                )
         return index_headers
 
 
