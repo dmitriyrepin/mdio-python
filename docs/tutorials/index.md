@@ -5,4 +5,5 @@
 
 quickstart
 compression
+rechunking
 ```
