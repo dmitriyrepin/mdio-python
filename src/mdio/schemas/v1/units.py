@@ -1,9 +1,12 @@
 """Unit schemas specific to MDIO v1."""
 
+from __future__ import annotations
+
 from typing import TypeAlias
 
 from pint import UnitRegistry
 from pydantic import Field
+from pydantic import HttpUrl
 
 from mdio.schemas.metadata import VersionedMetadataConvention
 from mdio.schemas.units import UnitEnum
@@ -118,7 +121,12 @@ AllUnitModel: TypeAlias = (
 
 
 # Versioned metadata conventions for units
-class AllUnits(VersionedMetadataConvention):
+class MDIOUnitsV1(VersionedMetadataConvention):
     """All Units."""
 
-    units_v1: AllUnitModel | list[AllUnitModel] | None = Field(default=None)
+    units: AllUnitModel | list[AllUnitModel] | None = Field(default=None)
+    version: int = 1
+    homepage: HttpUrl = (
+        "https://mdio-python.readthedocs.io/en/v1/data_models/version_1.html"
+    )
+    schema_url: HttpUrl = "https://example.com/to-be-determined.json"

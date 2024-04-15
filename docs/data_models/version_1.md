@@ -57,7 +57,7 @@
 :::{dropdown} Units
 
 ```{eval-rst}
-.. autopydantic_model:: mdio.schemas.v1.units.AllUnits
+.. autopydantic_model:: mdio.schemas.v1.units.MDIOUnitsV1
 ```
 
 ```{eval-rst}
