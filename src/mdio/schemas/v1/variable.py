@@ -11,31 +11,24 @@ additional metadata.
 variable in MDIO format. It can have coordinates and can also hold metadata.
 """
 
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
-
 from pydantic import Field
 from pydantic import create_model
 
 from mdio.schemas.base import NamedArray
 from mdio.schemas.core import CamelCaseStrictModel
 from mdio.schemas.core import model_fields
+from mdio.schemas.dtype import ScalarType
 from mdio.schemas.metadata import ChunkGridMetadata
 from mdio.schemas.metadata import UserAttributes
 from mdio.schemas.v1.stats import StatisticsMetadata
-from mdio.schemas.v1.units import MDIOUnitsV1
-
-
-if TYPE_CHECKING:
-    from mdio.schemas.dtype import ScalarType
+from mdio.schemas.v1.units import AllUnits
 
 
 class Coordinate(NamedArray):
     """An MDIO coordinate array with metadata."""
 
     data_type: ScalarType = Field(..., description="Data type of coordinate.")
-    metadata: list[MDIOUnitsV1 | UserAttributes] | None = Field(
+    metadata: list[AllUnits | UserAttributes] | None = Field(
         default=None, description="Coordinate metadata."
     )
 
@@ -43,7 +36,7 @@ class Coordinate(NamedArray):
 VariableMetadata = create_model(
     "VariableMetadata",
     **model_fields(ChunkGridMetadata),
-    **model_fields(MDIOUnitsV1),
+    **model_fields(AllUnits),
     **model_fields(StatisticsMetadata),
     **model_fields(UserAttributes),
     __base__=CamelCaseStrictModel,
