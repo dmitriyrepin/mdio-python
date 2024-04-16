@@ -1,9 +1,5 @@
 """Dataset model for MDIO V1."""
 
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
-
 from pydantic import AwareDatetime
 from pydantic import Field
 from pydantic import create_model
@@ -12,10 +8,7 @@ from mdio.schemas.base import BaseDataset
 from mdio.schemas.core import CamelCaseStrictModel
 from mdio.schemas.core import model_fields
 from mdio.schemas.metadata import UserAttributes
-
-
-if TYPE_CHECKING:
-    from mdio.schemas.v1.variable import Variable
+from mdio.schemas.v1.variable import Variable
 
 
 class DatasetInfo(CamelCaseStrictModel):

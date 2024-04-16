@@ -11,24 +11,17 @@ additional metadata.
 variable in MDIO format. It can have coordinates and can also hold metadata.
 """
 
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
-
 from pydantic import Field
 from pydantic import create_model
 
 from mdio.schemas.base import NamedArray
 from mdio.schemas.core import CamelCaseStrictModel
 from mdio.schemas.core import model_fields
+from mdio.schemas.dtype import ScalarType
 from mdio.schemas.metadata import ChunkGridMetadata
 from mdio.schemas.metadata import UserAttributes
 from mdio.schemas.v1.stats import StatisticsMetadata
 from mdio.schemas.v1.units import AllUnits
-
-
-if TYPE_CHECKING:
-    from mdio.schemas.dtype import ScalarType
 
 
 class Coordinate(NamedArray):

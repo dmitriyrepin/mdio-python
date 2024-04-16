@@ -1,21 +1,14 @@
 """Base models to subclass from."""
 
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
-
 from pydantic import ConfigDict
 from pydantic import Field
 from pydantic.json_schema import GenerateJsonSchema
 
+from mdio.schemas.compressors import ZFP
+from mdio.schemas.compressors import Blosc
 from mdio.schemas.core import CamelCaseStrictModel
+from mdio.schemas.dimension import NamedDimension
 from mdio.schemas.dtype import DataTypeModel
-
-
-if TYPE_CHECKING:
-    from mdio.schemas.compressors import ZFP
-    from mdio.schemas.compressors import Blosc
-    from mdio.schemas.dimension import NamedDimension
 
 
 JSON_SCHEMA_DIALECT = GenerateJsonSchema.schema_dialect
