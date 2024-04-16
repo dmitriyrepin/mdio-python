@@ -1,5 +1,7 @@
 """Common units for resource assessment data."""
 
+from __future__ import annotations
+
 from enum import Enum
 from enum import unique
 

@@ -16,6 +16,8 @@ Both classes extend from the base class BaseHistogram, which represents
 a histogram with count of each bin.
 """
 
+from __future__ import annotations
+
 from typing import TypeAlias
 
 from pydantic import Field

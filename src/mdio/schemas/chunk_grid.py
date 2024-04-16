@@ -1,5 +1,7 @@
 """This module contains data models for Zarr's chunk grid."""
 
+from __future__ import annotations
+
 from pydantic import Field
 
 from mdio.schemas.core import CamelCaseStrictModel

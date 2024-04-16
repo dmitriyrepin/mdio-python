@@ -5,6 +5,8 @@ Important Objects:
     - ZFP: Class that represents the ZFP compression model.
 """
 
+from __future__ import annotations
+
 from enum import Enum
 from enum import StrEnum
 
@@ -88,7 +90,7 @@ class ZFP(CamelCaseStrictModel):
     )
 
     @model_validator(mode="after")
-    def check_requirements(self) -> "ZFP":
+    def check_requirements(self) -> ZFP:
         """Check if ZFP parameters make sense."""
         mode = self.mode
 

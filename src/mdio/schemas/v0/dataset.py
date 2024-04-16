@@ -1,6 +1,6 @@
 """Dataset model for MDIO V0."""
 
-from typing import Optional
+from __future__ import annotations
 
 from pydantic import AwareDatetime
 from pydantic import Field
@@ -42,25 +42,25 @@ class DatasetMetadataModelV0(StrictModel):
     )
 
     # Statistical information
-    std: Optional[float] = Field(
+    std: float | None = Field(
         default=None, description="Standard deviation of the samples."
     )
 
-    rms: Optional[float] = Field(
+    rms: float | None = Field(
         default=None, description="Root mean squared value of the samples."
     )
 
-    min: Optional[float] = Field(
+    min: float | None = Field(
         default=None,
         description="Minimum value of the samples.",
     )
 
-    max: Optional[float] = Field(
+    max: float | None = Field(
         default=None,
         description="Maximum value of the samples.",
     )
 
-    trace_count: Optional[int] = Field(
+    trace_count: int | None = Field(
         default=None, description="Number of traces in the SEG-Y file."
     )
 

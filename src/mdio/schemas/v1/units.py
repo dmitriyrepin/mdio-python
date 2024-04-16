@@ -1,5 +1,7 @@
 """Unit schemas specific to MDIO v1."""
 
+from __future__ import annotations
+
 from typing import TypeAlias
 
 from pint import UnitRegistry
