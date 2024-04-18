@@ -2470,32 +2470,32 @@ setuptools = "*"
 
 [[package]]
 name = "numba"
-version = "0.59.0rc1"
+version = "0.59.1"
 description = "compiling Python code using LLVM"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "numba-0.59.0rc1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:223453e03b74b68501f4a44ee307641272f1043d204ae3659876ba904e3b76b5"},
-    {file = "numba-0.59.0rc1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:09abefa927fe0546e28e1ab122891955fdc3cea20be02746be58fb36820ba866"},
-    {file = "numba-0.59.0rc1-cp310-cp310-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:ca4eabebae0e60954e54b5f368b5973ff49e3c8dcd838164514b1bbbb48e7538"},
-    {file = "numba-0.59.0rc1-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:a7c49fde29fc5acfcd8278d61923fa0d6976141c2cfed8f13e582eaad598ded8"},
-    {file = "numba-0.59.0rc1-cp310-cp310-win_amd64.whl", hash = "sha256:325b3594b5a329d3bf2acc4560a9d9f4d88042a80693e3e8c5d73270579ab8df"},
-    {file = "numba-0.59.0rc1-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:2ef2394d24a167e3137b9ec660172d111ffb8cf7718309ea90910b58fa64f60b"},
-    {file = "numba-0.59.0rc1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:1947f78473fc7a093e27e02b9d401a70b6b329a6cb5b75e14ad456e97e54fa56"},
-    {file = "numba-0.59.0rc1-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:468b04c17d6276b2388b15ac45f08f55fcc692d308d7025d1e1143d3e6ed8da6"},
-    {file = "numba-0.59.0rc1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:280614e933df0177e65f1b436ed456b771fab456140627f4f3d5d04e345d76b2"},
-    {file = "numba-0.59.0rc1-cp311-cp311-win_amd64.whl", hash = "sha256:837d4ac751ace4549e47af793e46914d5b69eb7b94509417cdf61cd557f86293"},
-    {file = "numba-0.59.0rc1-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:0fcfdbc2e0a038842663b665c4a0c93051beb2742c01346ae2d843f50e6d4a78"},
-    {file = "numba-0.59.0rc1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:07d76dbecca1e05b788b1055892f2d352ff907f3b84a5100caebee6ed09e7747"},
-    {file = "numba-0.59.0rc1-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:896de500ef113ee9647fb8c444338bdc9d45e910663da2a102bbc62818427eb4"},
-    {file = "numba-0.59.0rc1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:4238babbee60ebea23f3765e6e632bccd1461b4eb3d3b047c21fa0d0bb2d40da"},
-    {file = "numba-0.59.0rc1-cp312-cp312-win_amd64.whl", hash = "sha256:5610ad0b433053d729d9b4b4cbb1671a5f86429ba047d4185dccc17877095133"},
-    {file = "numba-0.59.0rc1-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:d54088cb6afd6a215e897b0a99d8926ca740fa8c1683372f41f7c4ffeb3e378f"},
-    {file = "numba-0.59.0rc1-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:d17e27539a3bfcafef066bcc010858fcca26bb2d09771b9a1e63b79986ceeb73"},
-    {file = "numba-0.59.0rc1-cp39-cp39-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:dca6d67f48fcaceb02a0f2cd808822d7bda7fb493b4559dafdf1035e836031c0"},
-    {file = "numba-0.59.0rc1-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:a7afb719faaf1437580808ca1f13e9ffea21c941ceccca2e59a8ab6aafac205d"},
-    {file = "numba-0.59.0rc1-cp39-cp39-win_amd64.whl", hash = "sha256:3a0de1a45cd4e13b47988c1539dacca023b9b9833ce32f706a4ecc5de165a229"},
-    {file = "numba-0.59.0rc1.tar.gz", hash = "sha256:c8aab21a34081f0c659890d9e49fda42e537d782f6a90c046280c6eae2069d78"},
+    {file = "numba-0.59.1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:97385a7f12212c4f4bc28f648720a92514bee79d7063e40ef66c2d30600fd18e"},
+    {file = "numba-0.59.1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:0b77aecf52040de2a1eb1d7e314497b9e56fba17466c80b457b971a25bb1576d"},
+    {file = "numba-0.59.1-cp310-cp310-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:3476a4f641bfd58f35ead42f4dcaf5f132569c4647c6f1360ccf18ee4cda3990"},
+    {file = "numba-0.59.1-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:525ef3f820931bdae95ee5379c670d5c97289c6520726bc6937a4a7d4230ba24"},
+    {file = "numba-0.59.1-cp310-cp310-win_amd64.whl", hash = "sha256:990e395e44d192a12105eca3083b61307db7da10e093972ca285c85bef0963d6"},
+    {file = "numba-0.59.1-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:43727e7ad20b3ec23ee4fc642f5b61845c71f75dd2825b3c234390c6d8d64051"},
+    {file = "numba-0.59.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:411df625372c77959570050e861981e9d196cc1da9aa62c3d6a836b5cc338966"},
+    {file = "numba-0.59.1-cp311-cp311-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:2801003caa263d1e8497fb84829a7ecfb61738a95f62bc05693fcf1733e978e4"},
+    {file = "numba-0.59.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:dd2842fac03be4e5324ebbbd4d2d0c8c0fc6e0df75c09477dd45b288a0777389"},
+    {file = "numba-0.59.1-cp311-cp311-win_amd64.whl", hash = "sha256:0594b3dfb369fada1f8bb2e3045cd6c61a564c62e50cf1f86b4666bc721b3450"},
+    {file = "numba-0.59.1-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:1cce206a3b92836cdf26ef39d3a3242fec25e07f020cc4feec4c4a865e340569"},
+    {file = "numba-0.59.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:8c8b4477763cb1fbd86a3be7050500229417bf60867c93e131fd2626edb02238"},
+    {file = "numba-0.59.1-cp312-cp312-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:7d80bce4ef7e65bf895c29e3889ca75a29ee01da80266a01d34815918e365835"},
+    {file = "numba-0.59.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:f7ad1d217773e89a9845886401eaaab0a156a90aa2f179fdc125261fd1105096"},
+    {file = "numba-0.59.1-cp312-cp312-win_amd64.whl", hash = "sha256:5bf68f4d69dd3a9f26a9b23548fa23e3bcb9042e2935257b471d2a8d3c424b7f"},
+    {file = "numba-0.59.1-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:4e0318ae729de6e5dbe64c75ead1a95eb01fabfe0e2ebed81ebf0344d32db0ae"},
+    {file = "numba-0.59.1-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:0f68589740a8c38bb7dc1b938b55d1145244c8353078eea23895d4f82c8b9ec1"},
+    {file = "numba-0.59.1-cp39-cp39-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:649913a3758891c77c32e2d2a3bcbedf4a69f5fea276d11f9119677c45a422e8"},
+    {file = "numba-0.59.1-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:9712808e4545270291d76b9a264839ac878c5eb7d8b6e02c970dc0ac29bc8187"},
+    {file = "numba-0.59.1-cp39-cp39-win_amd64.whl", hash = "sha256:8d51ccd7008a83105ad6a0082b6a2b70f1142dc7cfd76deb8c5a862367eb8c86"},
+    {file = "numba-0.59.1.tar.gz", hash = "sha256:76f69132b96028d2774ed20415e8c528a34e3299a40581bae178f0994a2f370b"},
 ]
 
 [package.dependencies]
@@ -4839,4 +4839,4 @@ lossy = ["zfpy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.13"
-content-hash = "d965057bc84b4b106ff0b387107a1ff62a502301bbe17ab516918206c47be846"
+content-hash = "ee0cb4ac705da0ebd0450bfab4fc044cac272157d1b9b0c526bdbe6fff0a67ca"
