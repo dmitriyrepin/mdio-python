@@ -27,21 +27,22 @@ python = ">=3.9,<3.13"
 click = "^8.1.7"
 click-params = "^0.5.0"
 zarr = "^2.17.2"
-dask = ">=2024.4.1"
+dask = ">=2024.4.2"
 tqdm = "^4.66.2"
-segyio = "^1.9.3"
+segyio = "^1.9.12"
+segy = "^0.0.15"
 numba = "^0.59.1"
 psutil = "^5.9.8"
-fsspec = ">=2024.3.1"
-pydantic = "^2.6.4"
+fsspec = "^2024.3.1"
+pydantic = "^2.7.1"
 pydantic-settings = "^2.2.1"
 pint = "^0.23"
 rich = "^13.7.1"
-distributed = {version = ">=2024.1.0", optional = true}
-bokeh = {version = "^3.4.0", optional = true}
+distributed = {version = ">=2024.4.2", optional = true}
+bokeh = {version = "^3.4.1", optional = true}
 s3fs = {version = ">=2024.3.1", optional = true}
 gcsfs = {version = ">=2024.3.1", optional = true}
-adlfs = {version = ">=2024.2.0", optional = true}
+adlfs = {version = ">=2024.4.1", optional = true}
 zfpy = {version = "^0.5.5", optional = true}
 urllib3 = "^1.26.18" # Workaround for poetry-plugin-export/issues/183
 
@@ -52,30 +53,30 @@ cloud = ["s3fs", "gcsfs", "adlfs"]
 lossy = ["zfpy"]
 
 [tool.poetry.group.dev.dependencies]
-ruff = "^0.3.5"
-coverage = {version = "^7.4.4", extras = ["toml"]}
+ruff = "^0.4.2"
+coverage = {version = "^7.5.0", extras = ["toml"]}
 darglint = "^1.8.1"
-mypy = "^1.9.0"
+mypy = "^1.10.0"
 pre-commit = "^3.7.0"
 pre-commit-hooks = "^4.6.0"
-pytest = "^8.1.1"
+pytest = "^8.1.2"
 pytest-dependency = "^0.6.0"
-safety = "^2.3.5"
+safety = "^3.1.0"
 typeguard = "^4.2.1"
 xdoctest = {version = "^1.1.3", extras = ["colors"]}
 Pygments = "^2.17.2"
 
 
 [tool.poetry.group.docs.dependencies]
-sphinx = "^7.2.6"
+sphinx = "^7.3.7"
 sphinx-design = "^0.5.0"
 sphinx-click = "^5.1.0"
 sphinx-copybutton = "^0.5.2"
 furo = ">=2024.1.29"
-myst-nb = "^1.0.0"
+myst-nb = "^1.1.0"
 linkify-it-py = "^2.0.3"
 autodoc-pydantic = "^2.1.0"
-sphinx-autobuild = ">=2024.2.4"
+sphinx-autobuild = ">=2024.4.16"
 
 [tool.poetry.scripts]
 mdio = "mdio.__main__:main"
@@ -174,6 +175,22 @@ disallow_untyped_defs = true
 
 [[tool.mypy.overrides]]
 module = ["fsspec.*", "numba.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["segyio", "zarr"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["segyio", "zarr"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["segyio", "zarr"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["segyio", "zarr"]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
