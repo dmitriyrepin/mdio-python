@@ -7,7 +7,7 @@ Important Objects:
 
 from __future__ import annotations
 
-from enum import Enum
+from enum import IntEnum
 from enum import StrEnum
 
 from pydantic import Field
@@ -26,7 +26,7 @@ class BloscAlgorithm(StrEnum):
     ZSTD = "zstd"
 
 
-class BloscShuffle(Enum):
+class BloscShuffle(IntEnum):
     """Enum for Blosc shuffle options."""
 
     NOSHUFFLE = 0
@@ -53,14 +53,38 @@ class Blosc(CamelCaseStrictModel):
         description="The size of the block to be used for compression.",
     )
 
+    def make_instance(self):  # noqa: ANN201
+        """Translate parameters to compressor kwargs.."""
+        from zarr.codecs import Blosc as _Blosc
+
+        return _Blosc(
+            cname=self.algorithm,
+            clevel=self.level,
+            shuffle=self.shuffle,
+            blocksize=self.blocksize,
+        )
+
+
+zfp_mode_map = {
+    "fixed_rate": 2,
+    "fixed_precision": 3,
+    "fixed_accuracy": 4,
+    "reversible": 5,
+}
+
 
 class ZFPMode(StrEnum):
     """Enum for ZFP algorithm modes."""
 
-    FIXED_ACCURACY = "fixed_accuracy"
-    FIXED_PRECISION = "fixed_precision"
     FIXED_RATE = "fixed_rate"
+    FIXED_PRECISION = "fixed_precision"
+    FIXED_ACCURACY = "fixed_accuracy"
     REVERSIBLE = "reversible"
+
+    @property
+    def int_code(self) -> int:
+        """Return the integer code of ZFP mode."""
+        return zfp_mode_map[self.value]
 
 
 class ZFP(CamelCaseStrictModel):
@@ -114,6 +138,17 @@ class ZFP(CamelCaseStrictModel):
             raise ValueError(msg)
 
         return self
+
+    def make_instance(self):  # noqa: ANN201
+        """Translate parameters to compressor kwargs.."""
+        from zarr.codecs import ZFPY as _ZFPY
+
+        return _ZFPY(
+            mode=self.mode.int_code,
+            tolerance=self.tolerance,
+            rate=self.rate,
+            precision=self.precision,
+        )
 
 
 class CompressorModel(CamelCaseStrictModel):
