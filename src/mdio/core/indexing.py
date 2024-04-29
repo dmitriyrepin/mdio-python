@@ -15,6 +15,7 @@ class ChunkIterator:
 
     Args:
         array: zarr.Array to get shape, and chunks from.
+        dims: The names of the dimensions.
         chunk_samples: This is a flag to return the last dimension's
             slice as full, instead of chunks. Default is True.
 
@@ -25,8 +26,9 @@ class ChunkIterator:
         num_chunks: Total number of chunks.
     """
 
-    def __init__(self, array: Array, chunk_samples: bool = True):
+    def __init__(self, array: Array, dims: list[str], chunk_samples: bool = True):
         self.arr_shape = array.shape
+        self.dims = dims
         self.len_chunks = array.chunks
 
         # Handle the case when we don't want to slice the sample axis.
@@ -54,7 +56,7 @@ class ChunkIterator:
         """Get total number of chunks."""
         return self.num_chunks
 
-    def __next__(self) -> tuple[slice, ...]:
+    def __next__(self) -> dict[str, slice]:
         """Iteration logic."""
         if self._idx <= self.num_chunks:
             # We build slices here. It is dimension agnostic
@@ -71,6 +73,8 @@ class ChunkIterator:
             slices = tuple(
                 slice(start, stop) for start, stop in zip(start_indices, stop_indices)
             )
+
+            slices = dict(zip(self.dims, slices))
 
             self._idx += 1
 
