@@ -6,16 +6,12 @@ import inspect
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-import numpy as np
-import zarr
-
-from mdio.constants import UINT32_MAX
 from mdio.core.dimension import Dimension
 from mdio.core.serialization import Serializer
 
 
 if TYPE_CHECKING:
-    from numpy.typing import NDArray
+    import zarr
 
 
 @dataclass
@@ -80,24 +76,6 @@ class Grid:
         dims_list = [Dimension.from_dict(dim) for dim in dims_list]
 
         return cls(dims_list)
-
-    def build_map(self, index_headers: dict[str, NDArray]) -> None:
-        """Build a map for live traces based on `index_headers`.
-
-        Args:
-            index_headers: Headers to be normalized (indexed)
-        """
-        live_dim_indices = ()
-        for dim in self.dims[:-1]:
-            dim_hdr = index_headers[dim.name]
-            live_dim_indices += (np.searchsorted(dim, dim_hdr),)
-
-        # We set dead traces to uint32 max. Should be far away from actual trace counts.
-        self.map = zarr.full(self.shape[:-1], dtype="uint32", fill_value=UINT32_MAX)
-        self.map.vindex[live_dim_indices] = range(len(live_dim_indices[0]))
-
-        self.live_mask = zarr.zeros(self.shape[:-1], dtype="bool")
-        self.live_mask.vindex[live_dim_indices] = 1
 
 
 class GridSerializer(Serializer):
