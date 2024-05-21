@@ -438,6 +438,7 @@ class Seismic2DStreamerShotSchema(AbstractSeismicSchema):
     _dim_names = ["shot_point", "channel", _trace_domain]
     _chunks = [1, 128, 4096]
     _coords = {
+        "gun": ("uint8", None, _dim_names[:-3]),
         "shot-x": ("float64", {"length": "m"}, _dim_names[:-2]),
         "shot-y": ("float64", {"length": "m"}, _dim_names[:-2]),
         "receiver-x": ("float64", {"length": "m"}, _dim_names[:-1]),
