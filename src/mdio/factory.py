@@ -451,7 +451,7 @@ SCHEMA_TEMPLATE_MAP = {
     MDIOSchemaType.SEISMIC_3D_POST_STACK_TIME: Seismic3DPostStackTimeSchema,
     MDIOSchemaType.SEISMIC_3D_POST_STACK_DEPTH: Seismic3DPostStackDepthSchema,
     # 3D Seismic Pre-Stack
-    MDIOSchemaType.SEISMIC_3D_PRE_STACK_CDP_TIME: Seismic3DPostStackTimeSchema,
+    MDIOSchemaType.SEISMIC_3D_PRE_STACK_CDP_TIME: Seismic3DPreStackCdpTimeSchema,
     MDIOSchemaType.SEISMIC_3D_PRE_STACK_CDP_TIME_IRREGULAR: Seismic3DPreStackCdpTimeIrregularSchema,
     MDIOSchemaType.SEISMIC_3D_PRE_STACK_CDP_DEPTH: Seismic3DPreStackCdpDepthSchema,
     MDIOSchemaType.SEISMIC_3D_PRE_STACK_CDP_DEPTH_IRREGULAR: Seismic3DPreStackCdpDepthIrregularSchema,
