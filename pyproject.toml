@@ -30,8 +30,8 @@ zarr = "^2.17.2"
 dask = ">=2024.4.2"
 tqdm = "^4.66.2"
 segyio = "^1.9.12"
-segy = "^0.0.15"
-numba = "^0.59.1"
+segy = "^0.1.6"
+numba = "^0.60.0"
 psutil = "^5.9.8"
 fsspec = "^2024.3.1"
 pydantic = "^2.7.1"
@@ -175,6 +175,10 @@ disallow_untyped_defs = true
 
 [[tool.mypy.overrides]]
 module = ["fsspec.*", "numba.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["segyio", "zarr"]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]

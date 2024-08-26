@@ -90,7 +90,7 @@ def get_approx_chunks(
     )
 
 
-class AbstractSeismicSchema(ABC):
+class AbstractSeismic(ABC):
     """Abstract class for specific seismic schemas."""
 
     _trace_domain: str = "unknown"
@@ -104,7 +104,7 @@ class AbstractSeismicSchema(ABC):
 
     @classmethod
     def create_dimension_coords(
-        cls: type[AbstractSeismicSchema],
+        cls: type[AbstractSeismic],
         shape: list[int],
         z_units: dict[str, str],
     ) -> list[Variable]:
@@ -126,7 +126,7 @@ class AbstractSeismicSchema(ABC):
 
     @classmethod
     def create_seismic_variables(  # noqa: PLR0913
-        cls: type[AbstractSeismicSchema],
+        cls: type[AbstractSeismic],
         sample_format: ScalarType,
         header_fields: dict[str, Any],
         shape: list[int],
@@ -174,7 +174,7 @@ class AbstractSeismicSchema(ABC):
 
     @classmethod
     def create_seismic_coordinates(
-        cls: type[AbstractSeismicSchema],
+        cls: type[AbstractSeismic],
         coords_dict: dict[str, tuple[str, dict[str, str], list[str]]],
         shape: list[int],
     ) -> list[Variable]:
@@ -200,7 +200,7 @@ class AbstractSeismicSchema(ABC):
 
     @classmethod
     def create(  # noqa: PLR0913
-        cls: type[AbstractSeismicSchema],
+        cls: type[AbstractSeismic],
         name: str,
         shape: list[int],
         header_fields: dict[str, str],
@@ -258,7 +258,9 @@ class AbstractSeismicSchema(ABC):
         return Dataset(variables=dataset_vars, metadata=dataset_meta)
 
 
-class Seismic3DPostStackTimeSchema(AbstractSeismicSchema):
+class Seismic3DPostStackTime(AbstractSeismic):
+    """3D seismic post stack in time domain."""
+
     _dataset_attrs = {
         "surveyDimensionality": "3D",
         "ensembleType": "line",
@@ -273,7 +275,9 @@ class Seismic3DPostStackTimeSchema(AbstractSeismicSchema):
     }
 
 
-class Seismic3DPostStackDepthSchema(AbstractSeismicSchema):
+class Seismic3DPostStackDepth(AbstractSeismic):
+    """3D seismic post stack in depth domain."""
+
     _dataset_attrs = {
         "surveyDimensionality": "3D",
         "ensembleType": "line",
@@ -288,7 +292,9 @@ class Seismic3DPostStackDepthSchema(AbstractSeismicSchema):
     }
 
 
-class Seismic3DPreStackCdpTimeSchema(AbstractSeismicSchema):
+class Seismic3DPreStackCdpTime(AbstractSeismic):
+    """3D seismic CDP gathers in time domain."""
+
     _dataset_attrs = {
         "surveyDimensionality": "3D",
         "ensembleType": "cdp",
@@ -303,7 +309,9 @@ class Seismic3DPreStackCdpTimeSchema(AbstractSeismicSchema):
     }
 
 
-class Seismic3DPreStackCdpTimeIrregularSchema(AbstractSeismicSchema):
+class Seismic3DPreStackCdpTimeIrregular(AbstractSeismic):
+    """3D seismic CDP gathers in time domain with non-regularized offsets."""
+
     _dataset_attrs = {
         "surveyDimensionality": "3D",
         "ensembleType": "cdp",
@@ -319,7 +327,9 @@ class Seismic3DPreStackCdpTimeIrregularSchema(AbstractSeismicSchema):
     }
 
 
-class Seismic3DPreStackCdpDepthSchema(AbstractSeismicSchema):
+class Seismic3DPreStackCdpDepth(AbstractSeismic):
+    """3D seismic CDP gathers in depth domain."""
+
     _dataset_attrs = {
         "surveyDimensionality": "3D",
         "ensembleType": "cdp",
@@ -334,7 +344,9 @@ class Seismic3DPreStackCdpDepthSchema(AbstractSeismicSchema):
     }
 
 
-class Seismic3DPreStackCdpDepthIrregularSchema(AbstractSeismicSchema):
+class Seismic3DPreStackCdpDepthIrregular(AbstractSeismic):
+    """3D seismic CDP gathers in depth domain with non-regularized offsets."""
+
     _dataset_attrs = {
         "surveyDimensionality": "3D",
         "ensembleType": "cdp",
@@ -350,7 +362,9 @@ class Seismic3DPreStackCdpDepthIrregularSchema(AbstractSeismicSchema):
     }
 
 
-class Seismic3DStreamerShotSchema(AbstractSeismicSchema):
+class Seismic3DStreamerShot(AbstractSeismic):
+    """3D seismic shot gathers for streamer acquisition."""
+
     _dataset_attrs = {
         "surveyDimensionality": "3D",
         "ensembleType": "shot",
@@ -368,7 +382,9 @@ class Seismic3DStreamerShotSchema(AbstractSeismicSchema):
     }
 
 
-class Seismic2DPostStackTimeSchema(AbstractSeismicSchema):
+class Seismic2DPostStackTime(AbstractSeismic):
+    """2D seismic post stack in time domain."""
+
     _dataset_attrs = {
         "surveyDimensionality": "2D",
         "ensembleType": "line",
@@ -383,7 +399,9 @@ class Seismic2DPostStackTimeSchema(AbstractSeismicSchema):
     }
 
 
-class Seismic2DPostStackDepthSchema(AbstractSeismicSchema):
+class Seismic2DPostStackDepth(AbstractSeismic):
+    """2D seismic post stack in depth domain."""
+
     _dataset_attrs = {
         "surveyDimensionality": "2D",
         "ensembleType": "line",
@@ -398,7 +416,9 @@ class Seismic2DPostStackDepthSchema(AbstractSeismicSchema):
     }
 
 
-class Seismic2DPreStackCdpTimeSchema(AbstractSeismicSchema):
+class Seismic2DPreStackCdpTime(AbstractSeismic):
+    """2D seismic CDP gathers in time domain."""
+
     _dataset_attrs = {
         "surveyDimensionality": "2D",
         "ensembleType": "cdp",
@@ -413,7 +433,9 @@ class Seismic2DPreStackCdpTimeSchema(AbstractSeismicSchema):
     }
 
 
-class Seismic2DPreStackCdpDepthSchema(AbstractSeismicSchema):
+class Seismic2DPreStackCdpDepth(AbstractSeismic):
+    """2D seismic CDP gathers in depth domain."""
+
     _dataset_attrs = {
         "surveyDimensionality": "2D",
         "ensembleType": "cdp",
@@ -428,7 +450,9 @@ class Seismic2DPreStackCdpDepthSchema(AbstractSeismicSchema):
     }
 
 
-class Seismic2DStreamerShotSchema(AbstractSeismicSchema):
+class Seismic2DStreamerShot(AbstractSeismic):
+    """2D seismic shot gathers for streamer acquisition."""
+
     _dataset_attrs = {
         "surveyDimensionality": "2D",
         "ensembleType": "shot",
@@ -448,23 +472,23 @@ class Seismic2DStreamerShotSchema(AbstractSeismicSchema):
 
 SCHEMA_TEMPLATE_MAP = {
     # 3D Seismic Post Stack
-    MDIOSchemaType.SEISMIC_3D_POST_STACK_TIME: Seismic3DPostStackTimeSchema,
-    MDIOSchemaType.SEISMIC_3D_POST_STACK_DEPTH: Seismic3DPostStackDepthSchema,
+    MDIOSchemaType.SEISMIC_3D_POST_STACK_TIME: Seismic3DPostStackTime,
+    MDIOSchemaType.SEISMIC_3D_POST_STACK_DEPTH: Seismic3DPostStackDepth,
     # 3D Seismic Pre-Stack
-    MDIOSchemaType.SEISMIC_3D_PRE_STACK_CDP_TIME: Seismic3DPreStackCdpTimeSchema,
-    MDIOSchemaType.SEISMIC_3D_PRE_STACK_CDP_TIME_IRREGULAR: Seismic3DPreStackCdpTimeIrregularSchema,
-    MDIOSchemaType.SEISMIC_3D_PRE_STACK_CDP_DEPTH: Seismic3DPreStackCdpDepthSchema,
-    MDIOSchemaType.SEISMIC_3D_PRE_STACK_CDP_DEPTH_IRREGULAR: Seismic3DPreStackCdpDepthIrregularSchema,
+    MDIOSchemaType.SEISMIC_3D_PRE_STACK_CDP_TIME: Seismic3DPreStackCdpTime,
+    MDIOSchemaType.SEISMIC_3D_PRE_STACK_CDP_TIME_IRREGULAR: Seismic3DPreStackCdpTimeIrregular,
+    MDIOSchemaType.SEISMIC_3D_PRE_STACK_CDP_DEPTH: Seismic3DPreStackCdpDepth,
+    MDIOSchemaType.SEISMIC_3D_PRE_STACK_CDP_DEPTH_IRREGULAR: Seismic3DPreStackCdpDepthIrregular,
     # 3D Seismic Shot
-    MDIOSchemaType.SEISMIC_3D_STREAMER_SHOT: Seismic3DStreamerShotSchema,
+    MDIOSchemaType.SEISMIC_3D_STREAMER_SHOT: Seismic3DStreamerShot,
     # 2D Seismic Post Stack
-    MDIOSchemaType.SEISMIC_2D_POST_STACK_TIME: Seismic2DPostStackTimeSchema,
-    MDIOSchemaType.SEISMIC_2D_POST_STACK_DEPTH: Seismic2DPostStackDepthSchema,
+    MDIOSchemaType.SEISMIC_2D_POST_STACK_TIME: Seismic2DPostStackTime,
+    MDIOSchemaType.SEISMIC_2D_POST_STACK_DEPTH: Seismic2DPostStackDepth,
     # 2D Seismic Pre-Stack
-    MDIOSchemaType.SEISMIC_2D_PRE_STACK_CDP_TIME: Seismic2DPostStackTimeSchema,
-    MDIOSchemaType.SEISMIC_2D_PRE_STACK_CDP_DEPTH: Seismic2DPostStackDepthSchema,
+    MDIOSchemaType.SEISMIC_2D_PRE_STACK_CDP_TIME: Seismic2DPostStackTime,
+    MDIOSchemaType.SEISMIC_2D_PRE_STACK_CDP_DEPTH: Seismic2DPostStackDepth,
     # 2D Seismic Shot
-    MDIOSchemaType.SEISMIC_2D_STREAMER_SHOT: Seismic2DStreamerShotSchema,
+    MDIOSchemaType.SEISMIC_2D_STREAMER_SHOT: Seismic2DStreamerShot,
 }
 
 fill_value_map = {
@@ -522,7 +546,7 @@ class MDIOFactory:
         self._ensure_schema()
         return self._schema.model_dump(mode="json", **self._dump_kw)
 
-    def create_schema(self, *args, **kwargs) -> None:
+    def create_schema(self, *args, **kwargs) -> None:  # noqa: ANN002, ANN003
         """Create the schema from factory."""
         self._schema = self._schema_maker.create(*args, **kwargs)
 
@@ -735,7 +759,8 @@ def traces_to_zarr(  # noqa: PLR0913
     )
 
 
-def segy_to_mdio(  # noqa: PLR0913
+# TODO(Altay): Simplify this A LOT  # noqa: TD003
+def segy_to_mdio(  # noqa: PLR0913, PLR0915
     in_path: str,
     out_path: str,
     name: str,
@@ -760,7 +785,7 @@ def segy_to_mdio(  # noqa: PLR0913
     samples = calc_sample_axis(sample_interval.item(), samples_per_trace.item())
 
     no_blocks = int(np.floor(segy_file.num_traces / block_size)) + 1
-    header_fields = segy_file.spec.trace.header_descriptor.fields
+    header_fields = segy_file.spec.trace.header.fields
     header_dtype = np.dtype([(field.name, field.format) for field in header_fields])
     headers = np.empty(dtype=header_dtype, shape=segy_file.num_traces)
     unique_dim_coords = {key: set() for key in index_keys}
@@ -804,7 +829,9 @@ def segy_to_mdio(  # noqa: PLR0913
     )
 
     out_schema_path = str(out_path).replace(".mdio", "_schema.json")
-    with open(out_schema_path, mode="w") as fp:
+
+    # TODO(Altay): This could be a cloud link; need to implement other `open` funcs.   # noqa: TD003
+    with open(out_schema_path, mode="w") as fp:  # noqa: PTH123
         fp.write(factory.schema_json)
 
     factory.make_mdio_dataset()
