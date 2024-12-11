@@ -38,6 +38,7 @@ pydantic = "^2.7.1"
 pydantic-settings = "^2.2.1"
 pint = "^0.23"
 rich = "^13.7.1"
+xarray = ">=2024.7.0"
 distributed = {version = ">=2024.4.2", optional = true}
 bokeh = {version = "^3.4.1", optional = true}
 s3fs = {version = ">=2024.3.1", optional = true}
@@ -178,37 +179,13 @@ module = ["fsspec.*", "numba.*"]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
-module = ["segyio", "zarr"]
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = ["segyio", "zarr"]
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = ["segyio", "zarr"]
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = ["segyio", "zarr"]
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = ["segyio", "zarr"]
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = ["segyio", "zarr"]
+module = ["zarr"]
 ignore_missing_imports = true
 
 [tool.pydantic-mypy]
 init_forbid_extra = true
 init_typed = true
 warn_required_dynamic_aliases = true
-
-[[tool.mypy.overrides]]
-module = ["segyio", "zarr"]
-ignore_missing_imports = true
 
 [build-system]
 requires = ["poetry-core", "fastentrypoints"]
