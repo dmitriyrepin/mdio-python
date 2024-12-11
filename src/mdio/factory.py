@@ -11,6 +11,7 @@ from datetime import UTC
 from datetime import datetime
 from enum import Enum
 from enum import auto
+from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
 
@@ -831,6 +832,9 @@ def segy_to_mdio(  # noqa: PLR0913, PLR0915
     out_schema_path = str(out_path).replace(".mdio", "_schema.json")
 
     # TODO(Altay): This could be a cloud link; need to implement other `open` funcs.   # noqa: TD003
+    out_dir = Path(out_schema_path).parent
+    out_dir.mkdir(parents=True, exist_ok=True)
+
     with open(out_schema_path, mode="w") as fp:  # noqa: PTH123
         fp.write(factory.schema_json)
 
