@@ -18,9 +18,10 @@ def runner() -> CliRunner:
 @pytest.mark.dependency
 def test_main_succeeds(runner: CliRunner, segy_input: Path, zarr_tmp: Path) -> None:
     """It exits with a status code of zero."""
-    cli_args = ["segy", "import", str(segy_input), str(zarr_tmp)]
-    cli_args.extend(["--header-locations", "181,185"])
-    cli_args.extend(["--header-names", "inline,crossline"])
+    cli_args = ["segy", "import", str(segy_input), str(zarr_tmp), "PostStack3DTime"]
+    cli_args.extend(["--header-locations", "17,13,81,85"])
+    cli_args.extend(["--header-names", "inline,crossline,cdp_x,cdp_y"])
+    cli_args.extend(["--overwrite"])
 
     result = runner.invoke(__main__.main, args=cli_args)
     assert result.exit_code == 0

@@ -2,16 +2,22 @@
 
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import dask.array as da
 import numpy as np
 import xarray as xr
 from psutil import cpu_count
 from tqdm.dask import TqdmCallback
+
+from json import dumps as json_dumps 
+from rich import print as rich_print
+from rich.console import Console
+from rich.table import Table
 
 from mdio.segy.blocked_io import to_segy
 from mdio.segy.creation import concat_files
@@ -185,3 +191,143 @@ def mdio_to_segy(  # noqa: PLR0912, PLR0913, PLR0915
             _ = client.submit(concat_files, paths=ordered_files).result()
         else:
             concat_files(paths=ordered_files, progress=True)
+
+def mdio_to_info_cli(mdio_path: str, storage_options: str, output_format: str="pretty") -> dict[str, Any]:
+    sl = StorageLocation(uri=mdio_path, options=storage_options)
+    return mdio_to_info(input_location=sl, output_format=output_format)
+
+def mdio_to_info(input_location: StorageLocation, output_format: str=None) -> dict[str, Any]:
+    """Returns information on a MDIO v1 dataset.
+
+    Optionally, prints the information in JSON or Table formats.
+
+    Args:
+        input_location (StorageLocation): The input location of the MDIO dataset.
+        output_format (str, optional): The output format for the information. Defaults to None.
+            If output_format is set to 'pretty' then a human-readable table is printed.
+            If output_format is set to 'json' then a JSON is printed.
+            Otherwise, no output is produced.
+
+    Returns:
+        dict[str, Any]: A dictionary containing information about the MDIO dataset.
+    """
+
+    mdio_xr = xr.open_dataset(input_location.uri, engine="zarr", mask_and_scale=False)
+
+    grid_dict = _parse_grid(mdio_xr)
+
+    t_var_name = mdio_xr.attrs["attributes"]["traceVariableName"]
+    stats = json.loads(mdio_xr[t_var_name].attrs["statsV1"])
+
+    mdio_info = {
+        "path": input_location.uri,
+        "stats": stats,
+        "grid": grid_dict
+    }
+
+    if output_format is not None:
+        if output_format.lower() == "pretty":
+            _pretty_print(mdio_info, t_var_name)
+        elif output_format.lower() == "json":
+            print(json_dumps(mdio_info, indent=2))
+
+    return mdio_info
+
+def _parse_grid(mdio_xr: xr.Dataset) -> dict[str, dict[str, int | str]]:
+    """Extract grid information per dimension."""
+    coords_names = list(mdio_xr.coords.keys())
+    grid_dict = {}
+    dimensions = []
+    for dim_name in mdio_xr.dims:
+        dim_var = mdio_xr[dim_name]
+        t = str(dim_var.dtype)
+        min_ = str(dim_var.values[0])
+        max_ = str(dim_var.values[-1])
+        size = str(dim_var.shape[0])
+        dimensions.append({"name": dim_name, "dtype": t, "min": min_, "max": max_, "size": size})
+        coords_names.remove(dim_name)
+    grid_dict["dimensions"] = dimensions
+
+    coordinates = []
+    for coord_name in coords_names:
+        coord_var = mdio_xr[coord_name]
+        t = str(coord_var.dtype)
+        d = list(coord_var.dims)
+        s = list(coord_var.shape)
+        ch = list(coord_var.encoding.get("chunks"))
+        coordinates.append({"name": coord_var.name, "dtype": t, "dims": d, "shape": s, "chunks": ch})
+    grid_dict["coordinates"] = coordinates
+
+    variables = []
+    for var in mdio_xr.data_vars.values():
+        if hasattr(var.dtype, "fields") and var.dtype.fields is not None:
+            t = f"Structured[{len(var.dtype.fields)}]"
+        else:
+            t = str(var.dtype)
+        d = list(var.dims)
+        c = list(set(var.coords.keys()) - set(var.dims))
+        s = list(var.shape)
+        ch = list(var.encoding.get("chunks"))
+        variables.append({"name": var.name, "dtype": t, "dims": d, "coords": c, "shape": s, "chunks": ch})
+    grid_dict["variables"] = variables
+
+    return grid_dict
+
+def _pretty_print(mdio_info: dict[str, Any], traceVariableName: str) -> None:
+    """Print pretty MDIO Info table to console."""
+
+    console = Console() 
+
+    grid_table = Table(title="Dimensions", show_edge=True, expand=True)
+    grid_table.add_column("Name", justify="right", style="cyan", no_wrap=True)
+    grid_table.add_column("Type", justify="left", style="magenta")
+    grid_table.add_column("Min", justify="left", style="magenta")
+    grid_table.add_column("Max", justify="left", style="magenta")
+    grid_table.add_column("Size", justify="left", style="green")
+
+    for dim_dict in mdio_info["grid"]["dimensions"]:
+        name, type_, min_, max_, size = dim_dict.values()
+        grid_table.add_row(name, type_, min_, max_, size)
+
+    coord_table = Table(title="Coordinates", show_edge=True, expand=True)
+    coord_table.add_column("Name", justify="right", style="cyan", no_wrap=True)
+    coord_table.add_column("Type", justify="left", style="magenta")
+    coord_table.add_column("Dimensions", justify="left", style="magenta")
+    coord_table.add_column("Size", justify="left", style="magenta")
+    coord_table.add_column("Chunks", justify="left", style="magenta")
+
+    for coord_dict in mdio_info["grid"]["coordinates"]:
+        name, type_, dims, shape, chunks = coord_dict.values()
+        coord_table.add_row(name, type_, "\n".join(dims), "\n".join(map(str, shape)), 
+                            "\n".join(map(str, chunks)), end_section=True)
+
+    var_table = Table(title="Variables", show_edge=True, expand=True)
+    var_table.add_column("Name", justify="right", style="cyan", no_wrap=True)
+    var_table.add_column("Type", justify="left", style="magenta")
+    var_table.add_column("Dimensions", justify="left", style="magenta")
+    var_table.add_column("Size", justify="left", style="magenta")
+    var_table.add_column("Chunks", justify="left", style="magenta")
+    var_table.add_column("Coordinates", justify="left", style="magenta")
+
+    for var_dict in mdio_info["grid"]["variables"]:
+        name, type_, dims, coords, shape, chunks = var_dict.values()
+        var_table.add_row(name, type_, "\n".join(dims), "\n".join(map(str, shape)), 
+                          "\n".join(map(str, chunks)), " ".join(coords), end_section=True)
+
+    stat_table = Table(title=f"'{traceVariableName}' statistics", show_edge=False)
+    stat_table.add_column("Stat", justify="right", style="cyan", no_wrap=True)
+    stat_table.add_column("Value", justify="left", style="magenta")
+
+    for stat, value in mdio_info["stats"].items():
+        if isinstance(value, float):
+            stat_table.add_row(stat, f"{value:.4f}")
+        # Ignore histogram for now
+
+    master_table = Table(title=f"File: {mdio_info['path']}", expand=True)
+    master_table.add_row(grid_table)
+    master_table.add_row(coord_table)
+    master_table.add_row(var_table)
+    # master_table.add_column("Statistics", justify="center")
+    master_table.add_row(stat_table)
+
+    console.print(master_table)

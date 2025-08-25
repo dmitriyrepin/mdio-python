@@ -1,9 +1,10 @@
 """Integration tests data for teapot dome SEG-Y."""
 
+from typing import Any
 from segy.schema import SegySpec
 from segy.standards import get_segy_standard
-from tests.integration.testing_helpers import customize_segy_specs
 
+from mdio.converters.segy import customize_segy_specs
 
 def custom_teapot_dome_segy_spec(keep_unaltered: bool) -> SegySpec:
     """Return the minimum customized SEG-Y specification for the teapot dome dataset.
@@ -114,4 +115,32 @@ def binary_header_teapot_dome() -> dict[str, int]:
         "num_extended_text_headers": 0,
         "segy_revision_major": 0,
         "segy_revision_minor": 0,
+    }
+
+def mdio_info_stats_teapot_dome() -> dict[str, Any]:
+    return {
+        "count": 97354860,
+        "sum": -8594.551666259766,
+        "sum_squares": 40571291.6875,
+        "min": -8.375323295593262,
+        "max": 0.0,
+        "histogram": {"counts": [], "bin_centers": []}
+    }
+
+def mdio_info_grid_teapot_dome() -> dict[str, Any]:
+    return {
+        "dimensions": [
+            {"name": "inline", "dtype": "int32", "min": "1", "max": "345", "size": "345"},
+            {"name": "crossline", "dtype": "int32", "min": "1", "max": "188", "size": "188"},
+            {"name": "time", "dtype": "int32", "min": "0", "max": "3000", "size": "1501"}
+        ],
+        "coordinates": [
+            {"name": "cdp_y", "dtype": "float64", "dims": ["inline", "crossline"], "shape": [345, 188], "chunks": [345, 188]},
+            {"name": "cdp_x", "dtype": "float64", "dims": ["inline", "crossline"], "shape": [345, 188], "chunks": [345, 188]}
+        ],
+        "variables": [
+            {"name": "amplitude", "dtype": "float32", "dims": ["inline", "crossline", "time"], "coords": ["cdp_x", "cdp_y"], "shape": [345, 188, 1501], "chunks": [128, 128, 128]},
+            {"name": "trace_mask", "dtype": "bool", "dims": ["inline", "crossline"], "coords": ["cdp_x", "cdp_y"], "shape": [345, 188], "chunks": [345, 188]},
+            {"name": "headers", "dtype": "Structured[85]", "dims": ["inline", "crossline"], "coords": ["cdp_x", "cdp_y"], "shape": [345, 188], "chunks": [128, 128]}
+        ]
     }

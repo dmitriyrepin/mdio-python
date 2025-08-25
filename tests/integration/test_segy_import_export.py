@@ -12,7 +12,8 @@ import numpy.testing as npt
 import pytest
 import xarray as xr
 from segy import SegyFile
-from tests.integration.testing_data import binary_header_teapot_dome
+from mdio.converters.mdio import mdio_to_info
+from tests.integration.testing_data import binary_header_teapot_dome, mdio_info_grid_teapot_dome, mdio_info_stats_teapot_dome
 from tests.integration.testing_data import custom_teapot_dome_segy_spec
 from tests.integration.testing_data import text_header_teapot_dome
 from tests.integration.testing_helpers import get_inline_header_values
@@ -398,6 +399,14 @@ class Test2_Import3DValidation:  # noqa N801 - The name is intentional. It indic
 @pytest.mark.dependency("test_3d_import")
 class Test3_Export3D:  # noqa N801 - The name is intentional. It indicates test ordering in the UI
     """Test SEG-Y exporting functionaliy."""
+
+    def test_mdio_to_info(self, capsys, zarr_tmp: Path) -> None:
+        """Test 3D export to IBM and IEEE."""
+        with capsys.disabled():
+            mdio_info = mdio_to_info(StorageLocation(str(zarr_tmp)), output_format="pretty")
+
+        assert mdio_info["grid"] == mdio_info_grid_teapot_dome()
+        assert mdio_info["stats"] == mdio_info_stats_teapot_dome()
 
     def test_export_3d_mdio(self, segy_input: Path, zarr_tmp: Path, segy_export_tmp: Path) -> None:
         """Test 3D export to IBM and IEEE."""
