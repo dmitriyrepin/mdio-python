@@ -211,7 +211,7 @@ def to_xarray_dataset(mdio_ds: Dataset) -> xr_Dataset:  # noqa: PLR0912
 
         # Add array attributes
         if v.metadata is not None:
-            metadata_dict = v.metadata.model_dump(exclude_none=True, exclude={"chunkGrid"})
+            metadata_dict = v.metadata.model_dump(exclude_none=True, exclude={"chunk_grid"})
             data_array.attrs.update(metadata_dict)
         if v.long_name:
             data_array.attrs["long_name"] = v.long_name
@@ -222,7 +222,7 @@ def to_xarray_dataset(mdio_ds: Dataset) -> xr_Dataset:  # noqa: PLR0912
 
         encoding = {
             "chunks": original_chunks,
-            "compressor": _convert_compressor(v.compressor),
+            "compressors": _convert_compressor(v.compressor),
             fill_value_key: fill_value,
         }
 
