@@ -2,6 +2,7 @@
 
 from typing import Any
 
+from mdio.builder.schemas import compressors
 from mdio.builder.schemas.dtype import ScalarType
 from mdio.builder.schemas.v1.variable import CoordinateMetadata
 from mdio.builder.templates.abstract_dataset_template import AbstractDatasetTemplate
@@ -17,7 +18,7 @@ class Seismic2DPreStackShotTemplate(AbstractDatasetTemplate):
         self._coord_dim_names = ("shot_point", "channel")
         self._dim_names = (*self._coord_dim_names, self._data_domain)
         self._coord_names = ("gun", "source_coord_x", "source_coord_y", "group_coord_x", "group_coord_y")
-        self._var_chunk_shape = (16, 64, 1024)
+        self._var_chunk_shape = (16, 32, 2048)
 
     @property
     def _name(self) -> str:
@@ -32,33 +33,39 @@ class Seismic2DPreStackShotTemplate(AbstractDatasetTemplate):
             self._builder.add_coordinate(name, dimensions=(name,), data_type=ScalarType.INT32)
 
         # Add non-dimension coordinates
+        compressor = compressors.Blosc(cname=compressors.BloscCname.zstd)
         coordinate_metadata = CoordinateMetadata(units_v1=self._horizontal_coord_unit)
         self._builder.add_coordinate(
             "gun",
             dimensions=("shot_point",),
             data_type=ScalarType.UINT8,
+            compressor=compressor,
         )
         self._builder.add_coordinate(
             "source_coord_x",
             dimensions=("shot_point",),
             data_type=ScalarType.FLOAT64,
+            compressor=compressor,
             metadata=coordinate_metadata,
         )
         self._builder.add_coordinate(
             "source_coord_y",
             dimensions=("shot_point",),
             data_type=ScalarType.FLOAT64,
+            compressor=compressor,
             metadata=coordinate_metadata,
         )
         self._builder.add_coordinate(
             "group_coord_x",
             dimensions=("shot_point", "channel"),
             data_type=ScalarType.FLOAT64,
+            compressor=compressor,
             metadata=coordinate_metadata,
         )
         self._builder.add_coordinate(
             "group_coord_y",
             dimensions=("shot_point", "channel"),
             data_type=ScalarType.FLOAT64,
+            compressor=compressor,
             metadata=coordinate_metadata,
         )
